@@ -19,12 +19,14 @@ jobs:
           flutter-version: '3.24.0'
           channel: 'stable'
       
-      - name: Fix Android v1 embedding
+      - name: Create fresh Flutter project
         run: |
-          rm -rf android/app/src/main/java/io/flutter
-          sed -i 's/override fun registerWith/\/\/override fun registerWith/g' android/app/src/main/**/MainActivity.kt 2>/dev/null || true
-      
-      - run: flutter clean
+          flutter create --org com.territory --project-name territory_footprint .
+          mkdir -p lib_bak
+          cp -r lib/* lib_bak/ 2>/dev/null || true
+          flutter create --org com.territory --project-name territory_footprint .
+          cp -r lib_bak/* lib/ 2>/dev/null || true
+          rm -rf lib_bak
       
       - run: flutter pub get
       
